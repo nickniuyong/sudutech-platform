@@ -1,0 +1,51 @@
+# ---------- Java / Maven ----------
+target/
+*.class
+*.jar
+!.mvn/wrapper/maven-wrapper.jar
+*.war
+*.ear
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.properties
+hs_err_pid*
+replay_pid*
+
+# ---------- Node / 前端 ----------
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+
+# ---------- IDE ----------
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+!.vscode/extensions.json
+.classpath
+.project
+.settings/
+factory-workspace/
+
+# ---------- 运行日志与临时文件 ----------
+logs/
+*.log
+tmp/
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ---------- 本地环境配置（含敏感信息，禁止提交） ----------
+application-local.yml
+*.env
+.env.*
+
+# ---------- 内部文档（不上传开源仓库） ----------
+RuoYi-Lite详细设计文档*.docx
+

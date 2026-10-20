@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sudutech</groupId>
+        <artifactId>sudutech-server</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>sudutech-screen</artifactId>
+    <description>大屏可视化模块：项目/页面/数据集/组件注册</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-ai</artifactId>
+        </dependency>
+    </dependencies>
+</project>

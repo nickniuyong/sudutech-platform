@@ -1,0 +1,72 @@
+package ${packageName}.service.impl;
+
+import com.mybatisflex.core.paginate.Page;
+import com.mybatisflex.core.query.QueryWrapper;
+import com.sudutech.common.utils.StringUtils;
+import ${packageName}.domain.${table.className};
+import ${packageName}.mapper.${table.className}Mapper;
+import ${packageName}.service.${table.className}Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static ${packageName}.domain.table.${table.className}TableDef.${tableDefVar};
+
+/**
+ * ${functionName} 服务实现
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Service
+@RequiredArgsConstructor
+public class ${table.className}ServiceImpl implements ${table.className}Service {
+
+    private final ${table.className}Mapper ${businessName}Mapper;
+
+    @Override
+    public Page<${table.className}> pageList(${table.className} query, int pageNum, int pageSize) {
+        QueryWrapper wrapper = QueryWrapper.create();
+#foreach($column in $columns)
+#if($column.isQuery == "1")
+#if($column.queryType == "LIKE")
+        if (StringUtils.isNotBlank(query.get${column.capField}())) {
+            wrapper.and(${tableDefVar}.${column.defVar}.like(query.get${column.capField}()));
+        }
+#else
+        if (query.get${column.capField}() != null && StringUtils.isNotBlank(String.valueOf(query.get${column.capField}()))) {
+            wrapper.and(${tableDefVar}.${column.defVar}.eq(query.get${column.capField}()));
+        }
+#end
+#end
+#end
+        wrapper.orderBy(${tableDefVar}.${pk.defVar}.desc());
+        return ${businessName}Mapper.paginate(Page.of(pageNum, pageSize), wrapper);
+    }
+
+    @Override
+    public List<${table.className}> selectList(${table.className} query) {
+        return ${businessName}Mapper.selectListByEntity(query);
+    }
+
+    @Override
+    public ${table.className} selectById(${pk.javaType} ${pk.javaField}) {
+        return ${businessName}Mapper.selectOneById(${pk.javaField});
+    }
+
+    @Override
+    public boolean insert(${table.className} entity) {
+        return ${businessName}Mapper.insert(entity) > 0;
+    }
+
+    @Override
+    public boolean update(${table.className} entity) {
+        return ${businessName}Mapper.update(entity) > 0;
+    }
+
+    @Override
+    public int deleteByIds(List<${pk.javaType}> ids) {
+        return ${businessName}Mapper.deleteBatchByIds(ids);
+    }
+}

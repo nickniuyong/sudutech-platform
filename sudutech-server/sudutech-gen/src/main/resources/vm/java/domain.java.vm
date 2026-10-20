@@ -1,0 +1,33 @@
+package ${packageName}.domain;
+
+import com.mybatisflex.annotation.Id;
+import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
+import com.sudutech.common.core.domain.BaseEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+/**
+ * ${functionName} 实体 ${table.tableName}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Table("${table.tableName}")
+public class ${table.className} extends BaseEntity {
+
+#if($pk)
+    @Id(keyType = KeyType.Auto)
+    private ${pk.javaType} ${pk.javaField};
+
+#end
+#foreach($column in $columns)
+#if($column.isPk != "1")
+    /** ${column.columnComment} */
+    private ${column.javaType} ${column.javaField};
+
+#end
+#end
+}

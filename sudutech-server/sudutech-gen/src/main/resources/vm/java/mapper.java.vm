@@ -1,0 +1,13 @@
+package ${packageName}.mapper;
+
+import com.mybatisflex.core.BaseMapper;
+import ${packageName}.domain.${table.className};
+
+/**
+ * ${functionName} Mapper
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${table.className}Mapper extends BaseMapper<${table.className}> {
+}

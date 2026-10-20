@@ -1,0 +1,78 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: sudutech-server
+  # local profile（application-local.yml，已被 gitignore）用于存放本机真实密码，后加载优先
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev,local}
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 50MB
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis-flex:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  global-config:
+    print-banner: false
+
+# Sa-Token 配置：JWT 风格 Bearer 头 + Redis 存储
+sa-token:
+  token-name: Authorization
+  token-prefix: Bearer
+  timeout: 28800
+  active-timeout: -1
+  is-concurrent: true
+  token-style: uuid
+  is-log: false
+  is-read-header: true
+  is-read-cookie: false
+
+springdoc:
+  api-docs:
+    enabled: true
+  group-configs:
+    - group: system
+      paths-to-match: /api/v1/system/**
+    - group: monitor
+      paths-to-match: /api/v1/monitor/**
+    - group: workflow
+      paths-to-match: /api/v1/wf/**
+    - group: screen
+      paths-to-match: /api/v1/screen/**
+    - group: report
+      paths-to-match: /api/v1/report/**
+    - group: gen
+      paths-to-match: /api/v1/gen/**
+    - group: ai
+      paths-to-match: /api/v1/ai/**
+
+knife4j:
+  enable: true
+  setting:
+    language: zh_cn
+
+# 平台自定义配置
+sudutech:
+  # 数据源密码 AES 加密密钥（生产环境务必通过环境变量覆盖）
+  security:
+    aes-key: ${SUDUTECH_AES_KEY:sudutech@2026##}
+  ai:
+    # 火山方舟 Ark OpenAI 兼容接口
+    ark:
+      base-url: ${ARK_BASE_URL:https://ark.cn-beijing.volces.com/api/v3}
+      api-key: ${ARK_API_KEY:}
+      model: ${ARK_MODEL:doubao-pro-32k}
+      timeout-seconds: 60
+
+logging:
+  level:
+    root: info
+    com.sudutech: debug

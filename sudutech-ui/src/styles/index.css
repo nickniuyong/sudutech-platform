@@ -1,0 +1,18 @@
+/* 全局基础样式 */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body, #app { height: 100%; font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Microsoft YaHei", Arial, sans-serif; }
+
+.app-container { padding: 16px; background: #f5f7fa; min-height: 100%; }
+
+.mb8 { margin-bottom: 8px; }
+.mt12 { margin-top: 12px; }
+
+.search-form { padding: 14px 14px 0; background: #fff; border-radius: 4px; margin-bottom: 12px; }
+
+/* 表格页容器 */
+.table-card { background: #fff; border-radius: 4px; padding: 14px; }
+
+/* 滚动条 */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-thumb { background: #dcdfe6; border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }

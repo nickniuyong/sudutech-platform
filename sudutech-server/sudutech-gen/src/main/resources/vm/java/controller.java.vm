@@ -1,0 +1,68 @@
+package ${packageName}.controller;
+
+import cn.dev33.satoken.annotation.SaCheckPermission;
+import com.mybatisflex.core.paginate.Page;
+import com.sudutech.common.annotation.BusinessType;
+import com.sudutech.common.annotation.Log;
+import com.sudutech.common.core.domain.R;
+import com.sudutech.common.core.domain.TableDataInfo;
+import com.sudutech.common.core.page.PageQuery;
+import ${packageName}.domain.${table.className};
+import ${packageName}.service.${table.className}Service;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * ${functionName}
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@RestController
+@RequestMapping("/api/v1/${moduleName}/${businessName}")
+@RequiredArgsConstructor
+public class ${table.className}Controller {
+
+    private final ${table.className}Service ${businessName}Service;
+
+    @SaCheckPermission("${moduleName}:${businessName}:list")
+    @GetMapping("/list")
+    public TableDataInfo<${table.className}> list(${table.className} query, PageQuery pageQuery) {
+        Page<${table.className}> page = ${businessName}Service.pageList(query, pageQuery.getPageNum(), pageQuery.getPageSize());
+        return TableDataInfo.build(page.getTotalRow(), page.getRecords());
+    }
+
+    @SaCheckPermission("${moduleName}:${businessName}:query")
+    @GetMapping("/{${pk.javaField}}")
+    public R<${table.className}> getInfo(@PathVariable ${pk.javaType} ${pk.javaField}) {
+        return R.ok(${businessName}Service.selectById(${pk.javaField}));
+    }
+
+    @SaCheckPermission("${moduleName}:${businessName}:add")
+    @Log(title = "${functionName}", businessType = BusinessType.INSERT)
+    @PostMapping
+    public R<Void> add(@RequestBody ${table.className} entity) {
+        ${businessName}Service.insert(entity);
+        return R.ok("新增成功", null);
+    }
+
+    @SaCheckPermission("${moduleName}:${businessName}:edit")
+    @Log(title = "${functionName}", businessType = BusinessType.UPDATE)
+    @PutMapping
+    public R<Void> edit(@RequestBody ${table.className} entity) {
+        ${businessName}Service.update(entity);
+        return R.ok("修改成功", null);
+    }
+
+    @SaCheckPermission("${moduleName}:${businessName}:remove")
+    @Log(title = "${functionName}", businessType = BusinessType.DELETE)
+    @DeleteMapping("/{${pk.javaField}s}")
+    public R<Void> remove(@PathVariable ${pk.javaType}[] ${pk.javaField}s) {
+        ${businessName}Service.deleteByIds(Arrays.stream(${pk.javaField}s).collect(Collectors.toList()));
+        return R.ok("删除成功", null);
+    }
+}

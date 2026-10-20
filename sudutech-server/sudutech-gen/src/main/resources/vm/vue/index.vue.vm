@@ -1,0 +1,140 @@
+<template>
+  <div class="app-container">
+    <!-- 搜索区 -->
+    <el-form :inline="true" :model="queryParams" class="search-form">
+#foreach($column in $columns)
+#if($column.isQuery == "1")
+      <el-form-item label="${column.columnComment}">
+#if($column.htmlType == "select")
+        <el-select v-model="queryParams.${column.javaField}" placeholder="请选择" clearable style="width: 180px">
+          <el-option v-for="d in dict('${column.dictType}')" :key="d.value" :label="d.label" :value="d.value" />
+        </el-select>
+#elseif($column.htmlType == "datetime")
+        <el-date-picker v-model="queryParams.${column.javaField}" type="date" placeholder="选择日期" style="width: 180px" />
+#else
+        <el-input v-model="queryParams.${column.javaField}" placeholder="请输入" clearable style="width: 180px" />
+#end
+      </el-form-item>
+#end
+#end
+      <el-form-item>
+        <el-button type="primary" @click="handleQuery">搜索</el-button>
+        <el-button @click="resetQuery">重置</el-button>
+      </el-form-item>
+    </el-form>
+
+    <!-- 操作按钮 -->
+    <el-row class="mb8">
+      <el-button v-perm="'${moduleName}:${businessName}:add'" type="primary" @click="openForm()">新增</el-button>
+      <el-button v-perm="'${moduleName}:${businessName}:remove'" type="danger" :disabled="!selection.length" @click="handleDelete">删除</el-button>
+    </el-row>
+
+    <!-- 列表 -->
+    <el-table :data="list" border stripe @selection-change="(rows) => (selection = rows)">
+      <el-table-column type="selection" width="50" />
+#foreach($column in $columns)
+#if($column.isList == "1" && $column.isPk != "1")
+      <el-table-column label="${column.columnComment}" prop="${column.javaField}" show-overflow-tooltip />
+#end
+#end
+      <el-table-column label="操作" width="160" fixed="right">
+        <template #default="{ row }">
+          <el-button v-perm="'${moduleName}:${businessName}:edit'" link type="primary" @click="openForm(row)">编辑</el-button>
+          <el-button v-perm="'${moduleName}:${businessName}:remove'" link type="danger" @click="handleDelete(row)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-pagination
+      v-model:current-page="queryParams.pageNum"
+      v-model:page-size="queryParams.pageSize"
+      :total="total"
+      layout="total, prev, pager, next"
+      class="mt12"
+      @current-change="getList"
+    />
+
+    <!-- 表单 -->
+    <el-dialog v-model="formVisible" :title="form.${pk.javaField} ? '编辑' : '新增'" width="620px">
+      <el-form :model="form" label-width="110px">
+#foreach($column in $columns)
+#if($column.isInsert == "1")
+        <el-form-item label="${column.columnComment}">
+#if($column.htmlType == "textarea")
+          <el-input v-model="form.${column.javaField}" type="textarea" :rows="3" />
+#elseif($column.htmlType == "select")
+          <el-select v-model="form.${column.javaField}" placeholder="请选择" clearable style="width: 100%">
+            <el-option v-for="d in dict('${column.dictType}')" :key="d.value" :label="d.label" :value="d.value" />
+          </el-select>
+#elseif($column.htmlType == "datetime")
+          <el-date-picker v-model="form.${column.javaField}" type="datetime" placeholder="选择时间" style="width: 100%" />
+#else
+          <el-input v-model="form.${column.javaField}" placeholder="请输入" />
+#end
+        </el-form-item>
+#end
+#end
+      </el-form>
+      <template #footer>
+        <el-button @click="formVisible = false">取消</el-button>
+        <el-button type="primary" @click="submitForm">确定</el-button>
+      </template>
+    </el-dialog>
+  </div>
+</template>
+
+<script setup>
+import { list${table.className}, get${table.className}, add${table.className}, update${table.className}, del${table.className} } from '@/api/${module}/${businessName}'
+
+const queryParams = reactive({ pageNum: 1, pageSize: 10 })
+const list = ref([])
+const total = ref(0)
+const selection = ref([])
+const formVisible = ref(false)
+const form = ref({})
+
+function getList() {
+  list${table.className}(queryParams).then((res) => {
+    list.value = res.rows
+    total.value = res.total
+  })
+}
+
+function handleQuery() {
+  queryParams.pageNum = 1
+  getList()
+}
+
+function resetQuery() {
+  Object.keys(queryParams).forEach((k) => {
+    if (!['pageNum', 'pageSize'].includes(k)) queryParams[k] = undefined
+  })
+  handleQuery()
+}
+
+function openForm(row) {
+  form.value = row ? { ...row } : {}
+  formVisible.value = true
+}
+
+function submitForm() {
+  const req = form.value.${pk.javaField} ? update${table.className} : add${table.className}
+  req(form.value).then(() => {
+    ElMessage.success('保存成功')
+    formVisible.value = false
+    getList()
+  })
+}
+
+function handleDelete(row) {
+  const ids = row ? [row.${pk.javaField}] : selection.value.map((r) => r.${pk.javaField})
+  ElMessageBox.confirm('确认删除所选记录？', '提示', { type: 'warning' }).then(() => {
+    del${table.className}(ids.join(',')).then(() => {
+      ElMessage.success('删除成功')
+      getList()
+    })
+  })
+}
+
+getList()
+</script>

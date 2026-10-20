@@ -1,0 +1,45 @@
+import request from '@/utils/request'
+
+export const listDictTypes = (params) => request.get('/api/v1/system/dict/type/list', { params })
+export const getDictType = (id) => request.get(`/api/v1/system/dict/type/${id}`)
+export const addDictType = (data) => request.post('/api/v1/system/dict/type', data)
+export const updateDictType = (data) => request.put('/api/v1/system/dict/type', data)
+export const delDictTypes = (ids) => request.delete(`/api/v1/system/dict/type/${ids}`)
+
+export const dictDataByType = (type) => request.get(`/api/v1/system/dict/data/type/${type}`)
+export const listDictData = (params) => request.get('/api/v1/system/dict/data/list', { params })
+export const getDictData = (code) => request.get(`/api/v1/system/dict/data/${code}`)
+export const addDictData = (data) => request.post('/api/v1/system/dict/data', data)
+export const updateDictData = (data) => request.put('/api/v1/system/dict/data', data)
+export const delDictData = (codes) => request.delete(`/api/v1/system/dict/data/${codes}`)
+
+export const listConfigs = (params) => request.get('/api/v1/system/config/list', { params })
+export const getConfig = (id) => request.get(`/api/v1/system/config/${id}`)
+export const addConfig = (data) => request.post('/api/v1/system/config', data)
+export const updateConfig = (data) => request.put('/api/v1/system/config', data)
+export const delConfigs = (ids) => request.delete(`/api/v1/system/config/${ids}`)
+
+export const listNotices = (params) => request.get('/api/v1/system/notice/list', { params })
+export const getNotice = (id) => request.get(`/api/v1/system/notice/${id}`)
+export const addNotice = (data) => request.post('/api/v1/system/notice', data)
+export const updateNotice = (data) => request.put('/api/v1/system/notice', data)
+export const delNotices = (ids) => request.delete(`/api/v1/system/notice/${ids}`)
+
+export const listOperLogs = (params) => request.get('/api/v1/system/operlog/list', { params })
+export const delOperLogs = (ids) => request.delete(`/api/v1/system/operlog/${ids}`)
+export const cleanOperLogs = () => request.delete('/api/v1/system/operlog/clean')
+export const listLoginLogs = (params) => request.get('/api/v1/system/loginlog/list', { params })
+export const delLoginLogs = (ids) => request.delete(`/api/v1/system/loginlog/${ids}`)
+export const cleanLoginLogs = () => request.delete('/api/v1/system/loginlog/clean')
+
+export const listJobs = (params) => request.get('/api/v1/monitor/job/list', { params })
+export const getJob = (id) => request.get(`/api/v1/monitor/job/${id}`)
+export const addJob = (data) => request.post('/api/v1/monitor/job', data)
+export const updateJob = (data) => request.put('/api/v1/monitor/job', data)
+export const delJobs = (ids) => request.delete(`/api/v1/monitor/job/${ids}`)
+export const runJob = (id) => request.put(`/api/v1/monitor/job/run/${id}`)
+export const changeJobStatus = (data) => request.put('/api/v1/monitor/job/changeStatus', data)
+export const listJobLogs = (params) => request.get('/api/v1/monitor/job/joblog/list', { params })
+
+export const listOnline = (params) => request.get('/api/v1/monitor/online/list', { params })
+export const forceLogout = (tokenId) => request.delete(`/api/v1/monitor/online/${tokenId}`)

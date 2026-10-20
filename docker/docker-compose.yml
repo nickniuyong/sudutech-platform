@@ -1,0 +1,84 @@
+version: "3.8"
+
+# sudutech 快速开发平台 一键编排
+# 使用: docker compose -f docker/docker-compose.yml up -d --build
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sudutech-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-sudutech@2026}
+      MYSQL_DATABASE: sudutech_lite
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../sql/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      - ../sql/init-data.sql:/docker-entrypoint-initdb.d/02-init.sql:ro
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-uroot", "-p${MYSQL_ROOT_PASSWORD:-sudutech@2026}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: sudutech-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-sudutech123}
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6380:6379"
+
+  minio:
+    image: minio/minio
+    container_name: sudutech-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_USER:-sudutech}
+      MINIO_ROOT_PASSWORD: ${MINIO_PASSWORD:-sudutech@2026}
+    volumes:
+      - minio-data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+  admin:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-server
+    container_name: sudutech-admin
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/sudutech_lite?useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-sudutech@2026}
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: "6379"
+      SPRING_DATA_REDIS_PASSWORD: ${REDIS_PASSWORD:-sudutech123}
+      # 火山方舟 NL2SQL（可选）
+      ARK_API_KEY: ${ARK_API_KEY:-}
+      ARK_MODEL: ${ARK_MODEL:-doubao-pro-32k}
+      SUDUTECH_AES_KEY: ${SUDUTECH_AES_KEY:-sudutech@2026##}
+    ports:
+      - "8080:8080"
+
+  web:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile-web
+    container_name: sudutech-web
+    depends_on:
+      - admin
+    ports:
+      - "80:80"
+
+volumes:
+  mysql-data:
+  redis-data:
+  minio-data:

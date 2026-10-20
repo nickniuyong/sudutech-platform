@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.sudutech</groupId>
+        <artifactId>sudutech-server</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>sudutech-admin</artifactId>
+    <description>启动模块：统一聚合、配置与入口</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-system</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-workflow</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-screen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-report</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-gen</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.sudutech</groupId>
+            <artifactId>sudutech-ai</artifactId>
+        </dependency>
+
+        <!-- Sa-Token Redis 集成（登录态存储） -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-jackson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+        </dependency>
+
+        <!-- 接口文档 Knife4j (OpenAPI 3) -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+
+        <!-- Velocity：代码生成模板渲染 -->
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity-engine-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>sudutech-admin</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

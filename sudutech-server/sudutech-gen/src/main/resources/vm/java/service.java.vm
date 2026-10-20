@@ -1,0 +1,27 @@
+package ${packageName}.service;
+
+import com.mybatisflex.core.paginate.Page;
+import ${packageName}.domain.${table.className};
+
+import java.util.List;
+
+/**
+ * ${functionName} 服务接口
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+public interface ${table.className}Service {
+
+    Page<${table.className}> pageList(${table.className} query, int pageNum, int pageSize);
+
+    List<${table.className}> selectList(${table.className} query);
+
+    ${table.className} selectById(${pk.javaType} ${pk.javaField});
+
+    boolean insert(${table.className} entity);
+
+    boolean update(${table.className} entity);
+
+    int deleteByIds(List<${pk.javaType}> ids);
+}

@@ -1,0 +1,11 @@
+-- ${functionName} 菜单SQL
+-- 请根据实际菜单ID调整
+INSERT INTO sys_menu (menu_name, parent_id, order_num, path, component, is_frame, menu_type, visible, status, perms, icon, create_by, create_time)
+VALUES ('${functionName}', 0, 1, '${businessName}', '${module}/${businessName}/index', 1, 'C', '0', '0', '${module}:${businessName}:list', 'form', 'admin', NOW());
+
+SELECT @parentId := LAST_INSERT_ID();
+
+INSERT INTO sys_menu VALUES(NULL, '${functionName}查询', @parentId, 1, '', '', 1, 'F', '0', '0', '${module}:${businessName}:query', '#', 'admin', NOW(), '', NULL);
+INSERT INTO sys_menu VALUES(NULL, '${functionName}新增', @parentId, 2, '', '', 1, 'F', '0', '0', '${module}:${businessName}:add', '#', 'admin', NOW(), '', NULL);
+INSERT INTO sys_menu VALUES(NULL, '${functionName}修改', @parentId, 3, '', '', 1, 'F', '0', '0', '${module}:${businessName}:edit', '#', 'admin', NOW(), '', NULL);
+INSERT INTO sys_menu VALUES(NULL, '${functionName}删除', @parentId, 4, '', '', 1, 'F', '0', '0', '${module}:${businessName}:remove', '#', 'admin', NOW(), '', NULL);
